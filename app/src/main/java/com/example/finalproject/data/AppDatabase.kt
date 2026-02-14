@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.finalproject.data.model.UserEntity
+import com.example.finalproject.data.model.CourseEntity
 import com.example.finalproject.data.repository.CourseDao
-import com.example.finalproject.data.Course
 import com.example.finalproject.data.repository.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,15 +16,14 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 
 @Database(
-    entities = [UserEntity::class , Course::class],
-    version = 1,
+    entities = [UserEntity::class, CourseEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun courseDao(): CourseDao
-
 
     companion object {
         @Volatile
@@ -40,14 +39,16 @@ abstract class AppDatabase : RoomDatabase() {
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            // Seed admin once, when DB is first created
+
                             CoroutineScope(Dispatchers.IO).launch {
                                 val database = getInstance(context)
                                 val dao = database.userDao()
+
                                 val adminEmail = "colmanBB@gmail.com"
                                 val adminPass = "123456"
 
                                 val existing = dao.getByEmail(adminEmail)
+
                                 if (existing == null) {
                                     dao.insert(
                                         UserEntity(
@@ -60,7 +61,6 @@ abstract class AppDatabase : RoomDatabase() {
                             }
                         }
                     })
-
                     .build()
 
                 INSTANCE = instance

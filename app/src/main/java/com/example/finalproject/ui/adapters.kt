@@ -12,17 +12,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.finalproject.R
-import com.example.finalproject.data.Course
+import com.example.finalproject.data.model.CourseEntity
 
 class CourseAdapter(
     private val context: Context,
-    private var items: MutableList<Course>,
+    private var items: ArrayList<CourseEntity>,
     private val isAdmin: Boolean,
-    private val onDeleteClicked: (Course) -> Unit
+    private val onDeleteClicked: (CourseEntity) -> Unit
 ) : RecyclerView.Adapter<CourseAdapter.VH>() {
 
-    fun updateData(newItems: List<Course>) {
-        items = newItems.toMutableList()
+    fun updateData(newItems: List<CourseEntity>) {
+        items = ArrayList(newItems)
         notifyDataSetChanged()
     }
 
@@ -46,7 +46,6 @@ class CourseAdapter(
             holder.delete.visibility = View.GONE
             holder.delete.setOnClickListener(null)
         }
-
 
         val url = item.imageUrl
         if (!url.isNullOrBlank()) {

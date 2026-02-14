@@ -2,24 +2,22 @@ package com.example.finalproject.data.repository
 
 import android.content.Context
 import com.example.finalproject.data.AppDatabase
-import com.example.finalproject.data.Course
+import com.example.finalproject.data.model.CourseEntity
 import com.example.finalproject.data.model.CategoryCount
-
 
 class CourseRepository(context: Context) {
 
     private val dao = AppDatabase.getInstance(context).courseDao()
 
-    suspend fun getAllCourses(): List<Course> {
+    suspend fun getAllCourses(): List<CourseEntity> {
         return dao.getAll()
     }
 
-    suspend fun insert(course: Course): Long {
+    suspend fun insert(course: CourseEntity): Long {
         return dao.insert(course)
     }
 
-
-    suspend fun delete(course: Course) {
+    suspend fun delete(course: CourseEntity) {
         dao.delete(course)
     }
 
@@ -30,6 +28,4 @@ class CourseRepository(context: Context) {
     suspend fun getCountByCategory(): List<CategoryCount> {
         return dao.countByCategory()
     }
-
-
 }
