@@ -14,7 +14,7 @@ interface CourseDao {
     @Query("SELECT * FROM courses ORDER BY title")
     suspend fun getAll(): List<CourseEntity>
 
-    // 🔥 Pagination
+    //  Pagination
     @Query("""
         SELECT * FROM courses
         ORDER BY title

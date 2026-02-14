@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 🔥 חובה בשביל Retrofit / אינטרנט -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Retrofit -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- GPS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -29,10 +33,17 @@
             android:exported="false" />
 
         <activity
+            android:name=".ui.LocationActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- מסך פתיחה -->
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true">

@@ -31,17 +31,20 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "final_project_db"
                 )
+                    .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
 
+                            // יצירת משתמש ADMIN ראשוני
                             CoroutineScope(Dispatchers.IO).launch {
-                                val database = getInstance(context)
+                                val database = INSTANCE ?: return@launch
                                 val dao = database.userDao()
 
                                 val adminEmail = "colmanBB@gmail.com"

@@ -33,7 +33,7 @@ class AuthRepository(context: Context) {
             role = role
         )
         val id = userDao.insert(newUser)
-        // אם נרצה: להתחבר ישר אחרי הרשמה
+        //  להתחבר ישר אחרי הרשמה
         session.saveSession(id.toInt(), role)
         return true
     }
@@ -41,6 +41,33 @@ class AuthRepository(context: Context) {
     fun logout() {
         session.clearSession()
     }
+
+    suspend fun getCurrentUser(): UserEntity? {
+        val id = session.getUserId() ?: return null
+        return userDao.getById(id)
+    }
+
+    suspend fun changeEmail(newEmail: String): Boolean {
+        val id = session.getUserId() ?: return false
+
+        // בדיקה בסיסית: שלא קיים כבר משתמש עם אותו אימייל
+        val existing = userDao.getByEmail(newEmail)
+        if (existing != null && existing.id != id) return false
+
+        val rows = userDao.updateEmail(id, newEmail)
+        return rows > 0
+    }
+
+    suspend fun changePassword(oldPassword: String, newPassword: String): Boolean {
+        val id = session.getUserId() ?: return false
+        val user = userDao.getById(id) ?: return false
+
+        if (user.passwordHash != hashPassword(oldPassword)) return false
+
+        val rows = userDao.updatePassword(id, hashPassword(newPassword))
+        return rows > 0
+    }
+
 
     fun isLoggedIn(): Boolean = session.getUserId() != null
 

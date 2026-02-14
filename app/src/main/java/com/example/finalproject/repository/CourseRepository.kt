@@ -13,6 +13,11 @@ class CourseRepository(context: Context) {
         return dao.getAll()
     }
 
+    // ✅ Pagination
+    suspend fun getPagedCourses(limit: Int, offset: Int): List<CourseEntity> {
+        return dao.getPaged(limit, offset)
+    }
+
     suspend fun insert(course: CourseEntity): Long {
         return dao.insert(course)
     }
